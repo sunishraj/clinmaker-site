@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClinMaker — Autonomous Clinical Data Management</title>
+  <meta name="description" content="ClinMaker is a GxP-grade clinical data management platform powered by AI agents. Automate ingestion, validation, coding, reconciliation, and SDTM transformation.">
+  <meta name="theme-color" content="#0d9488">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230d9488'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Inter,system-ui,sans-serif' font-weight='900' font-size='18' fill='white'%3EC%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal-500: #14b8a6;
+      --teal-600: #0d9488;
+      --teal-700: #0f766e;
+      --teal-800: #115e59;
+      --teal-900: #134e4a;
+      --violet: #7850dc;
+      --violet-light: #f2eefc;
+      --surface-bg: #f2f1ee;
+      --surface-card: #fcfcfa;
+      --surface-border: #e4e2de;
+      --text-primary: #20202a;
+      --text-secondary: #64645f;
+      --white: #ffffff;
+      --green: #16a374;
+      --amber: #c28200;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text-primary);
+      background: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--surface-border);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 24px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { font-size: 1.5rem; font-weight: 900; text-decoration: none; color: var(--text-primary); }
+    .logo span { color: var(--teal-600); }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
+      text-decoration: none; color: var(--text-secondary);
+      font-size: 0.875rem; font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--teal-600); }
+    .nav-cta {
+      background: var(--teal-600); color: var(--white) !important;
+      padding: 8px 20px; border-radius: 8px; font-weight: 600 !important;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--teal-700); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 140px 24px 80px;
+      background: linear-gradient(160deg, var(--white) 0%, #f0fdf9 40%, var(--surface-bg) 100%);
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -200px; right: -200px;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(20,184,166,0.08) 0%, transparent 70%);
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -150px; left: -150px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(120,80,220,0.06) 0%, transparent 70%);
+    }
+    .hero-content { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--violet-light); color: var(--violet);
+      padding: 6px 16px; border-radius: 100px;
+      font-size: 0.8125rem; font-weight: 600; margin-bottom: 24px;
+    }
+    .hero-badge::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--violet); animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 3.75rem);
+      font-weight: 900; line-height: 1.1; margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 .teal { color: var(--teal-600); }
+    .hero p {
+      font-size: 1.2rem; color: var(--text-secondary);
+      max-width: 600px; margin: 0 auto 36px; line-height: 1.7;
+    }
+    .hero-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--teal-600); color: var(--white);
+      padding: 14px 32px; border-radius: 10px;
+      font-size: 1rem; font-weight: 600; text-decoration: none;
+      transition: all 0.2s; border: none; cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--teal-700); transform: translateY(-1px); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--white); color: var(--text-primary);
+      padding: 14px 32px; border-radius: 10px;
+      font-size: 1rem; font-weight: 600; text-decoration: none;
+      border: 1px solid var(--surface-border); transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--teal-500); color: var(--teal-700); }
+
+    /* ── COMPLIANCE STRIP ── */
+    .compliance {
+      background: var(--teal-900); color: rgba(255,255,255,0.85);
+      padding: 16px 24px; text-align: center;
+      font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.05em;
+    }
+    .compliance strong { color: var(--white); }
+
+    /* ── SECTIONS ── */
+    .section {
+      padding: 96px 24px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal-600); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 800; line-height: 1.2; margin-bottom: 16px;
+    }
+    .section-subtitle {
+      font-size: 1.1rem; color: var(--text-secondary);
+      max-width: 600px; margin-bottom: 56px; line-height: 1.7;
+    }
+    .section-center { text-align: center; }
+    .section-center .section-subtitle { margin-left: auto; margin-right: auto; }
+
+    /* ── PROBLEM ── */
+    .problem-section { background: var(--surface-bg); }
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .problem-card {
+      background: var(--surface-card); border: 1px solid var(--surface-border);
+      border-radius: 12px; padding: 32px;
+    }
+    .problem-card .icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 16px;
+    }
+    .problem-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .problem-card p { font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6; }
+    .icon-red { background: #fef2f2; }
+    .icon-amber { background: #fffbeb; }
+    .icon-blue { background: #f0f9ff; }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--white); border: 1px solid var(--surface-border);
+      border-radius: 12px; padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover { border-color: var(--teal-500); transform: translateY(-2px); }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: linear-gradient(135deg, #f0fdfa, #ccfbf1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; margin-bottom: 16px;
+    }
+    .feature-card.ai .feature-icon {
+      background: linear-gradient(135deg, var(--violet-light), #e4d9fc);
+    }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .feature-card p { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ── HOW IT WORKS ── */
+    .how-section { background: var(--surface-bg); }
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 32px; position: relative;
+    }
+    .step {
+      text-align: center; padding: 32px 24px;
+      background: var(--surface-card); border: 1px solid var(--surface-border);
+      border-radius: 16px; position: relative;
+    }
+    .step-number {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--teal-600); color: var(--white);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; font-weight: 800; margin-bottom: 16px;
+    }
+    .step h3 { font-size: 1.125rem; font-weight: 700; margin-bottom: 8px; }
+    .step p { font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.6; }
+    .step-arrow {
+      display: none; position: absolute; right: -24px; top: 50%;
+      transform: translateY(-50%); color: var(--teal-500); font-size: 1.5rem;
+    }
+    @media (min-width: 768px) {
+      .step-arrow { display: block; }
+    }
+
+    /* ── AGENTS ── */
+    .agents-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .agent-card {
+      background: var(--white); border: 1px solid var(--surface-border);
+      border-radius: 12px; padding: 28px; display: flex; gap: 16px; align-items: flex-start;
+      transition: border-color 0.2s;
+    }
+    .agent-card:hover { border-color: var(--violet); }
+    .agent-icon {
+      width: 44px; height: 44px; min-width: 44px; border-radius: 10px;
+      background: var(--violet-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem;
+    }
+    .agent-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .agent-card p { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--teal-800), var(--teal-900));
+      padding: 80px 24px; text-align: center; color: var(--white);
+    }
+    .cta-section h2 {
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 800; margin-bottom: 16px;
+    }
+    .cta-section p {
+      font-size: 1.1rem; opacity: 0.85;
+      max-width: 500px; margin: 0 auto 32px;
+    }
+    .btn-white {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--white); color: var(--teal-800);
+      padding: 14px 32px; border-radius: 10px;
+      font-size: 1rem; font-weight: 700; text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-white:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--text-primary); color: rgba(255,255,255,0.6);
+      padding: 48px 24px;
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .footer-logo { font-size: 1.25rem; font-weight: 900; color: var(--white); }
+    .footer-logo span { color: var(--teal-500); }
+    .footer-text { font-size: 0.8125rem; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      color: rgba(255,255,255,0.6); text-decoration: none;
+      font-size: 0.8125rem; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--teal-500); }
+
+    /* ── MOBILE NAV ── */
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-toggle svg { width: 24px; height: 24px; color: var(--text-primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: absolute; top: 64px; left: 0; right: 0;
+        background: var(--white); border-bottom: 1px solid var(--surface-border);
+        padding: 16px 24px; gap: 16px;
+      }
+      .nav-toggle { display: block; }
+      .hero { padding: 120px 24px 60px; }
+      .hero h1 { font-size: 2rem; }
+      .section { padding: 64px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="logo">Clin<span>Maker</span></a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#agents">AI Agents</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#contact" class="nav-cta">Request a Demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">AI-Powered Clinical Data Platform</div>
+      <h1>Clinical Data Management,<br><span class="teal">Reimagined.</span></h1>
+      <p>ClinMaker deploys autonomous AI agents to ingest, validate, code, reconcile, and transform your clinical data &mdash; so your team can focus on what matters.</p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn-primary">Request a Demo &rarr;</a>
+        <a href="#features" class="btn-secondary">Explore Features</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPLIANCE STRIP -->
+  <div class="compliance">
+    <strong>21 CFR Part 11</strong> &nbsp;&bull;&nbsp; <strong>Annex 11</strong> &nbsp;&bull;&nbsp; <strong>ICH E6(R3) GCP</strong> &nbsp;&bull;&nbsp; Built for GxP-regulated environments
+  </div>
+
+  <!-- PROBLEM -->
+  <section class="problem-section">
+    <div class="section section-center">
+      <div class="section-label">The Challenge</div>
+      <h2 class="section-title">Clinical data management hasn't kept up</h2>
+      <p class="section-subtitle">Teams still spend months on manual processes that delay database lock, increase costs, and introduce risk.</p>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="icon icon-red">&#9888;</div>
+          <h3>Manual Data Reconciliation</h3>
+          <p>Cross-referencing EDC, safety, labs, and vendor data by hand is slow, error-prone, and doesn't scale across multi-site global trials.</p>
+        </div>
+        <div class="problem-card">
+          <div class="icon icon-amber">&#9203;</div>
+          <h3>Slow Query Resolution</h3>
+          <p>Queries take days to draft, issue, and resolve. Aging queries pile up and delay database lock timelines.</p>
+        </div>
+        <div class="problem-card">
+          <div class="icon icon-blue">&#128202;</div>
+          <h3>Fragmented Tooling</h3>
+          <p>Separate systems for ingestion, validation, coding, SDTM, and analytics create silos and force manual hand-offs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="section section-center">
+      <div class="section-label">Platform</div>
+      <h2 class="section-title">Everything you need, in one place</h2>
+      <p class="section-subtitle">A unified platform covering the full clinical data lifecycle from protocol to submission.</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#128229;</div>
+          <h3>Data Ingestion</h3>
+          <p>Connect to EDC, Safety DB, labs, imaging, ePRO, RTSM, and devices. Automated schema recognition and canonical mapping.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#9989;</div>
+          <h3>Validation Engine</h3>
+          <p>Three-level validation: syntactic checks, cross-form logic, and cross-source consistency. Configurable rule catalogs per study.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128172;</div>
+          <h3>Query Management</h3>
+          <p>Unified query lifecycle with auto-generated query text, SLA tracking, escalation workflows, and site-facing issuance.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#127973;</div>
+          <h3>Medical Coding</h3>
+          <p>AI-assisted MedDRA and WHO Drug coding with configurable auto-code thresholds and a full coder workbench.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128260;</div>
+          <h3>Data Reconciliation</h3>
+          <p>SAE and external vendor reconciliation with matching algorithms, discrepancy management, and domain-specific views.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128203;</div>
+          <h3>Protocol Authoring</h3>
+          <p>Rich-text protocol editor with section versioning, AI intelligence, DOCX export, and ICH M11 structure support.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128736;</div>
+          <h3>Study Build</h3>
+          <p>CDASH-aligned EDC design with forms, fields, edit checks, codelists, and platform-specific artifact generation.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128640;</div>
+          <h3>SDTM Transformation</h3>
+          <p>Canonical-to-SDTM mapping with AI-bootstrapped suggestions, conformance checks, Define.xml, and full traceability.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128200;</div>
+          <h3>Analytics &amp; Dashboards</h3>
+          <p>Role-aware KPIs, site performance, data quality trends, enrollment tracking, and cross-study intelligence.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI AGENTS -->
+  <section id="agents" class="problem-section">
+    <div class="section section-center">
+      <div class="section-label">Intelligence</div>
+      <h2 class="section-title">Powered by autonomous AI agents</h2>
+      <p class="section-subtitle">Each agent handles a specific domain, proposes actions, and waits for human approval &mdash; AI assists, humans decide.</p>
+      <div class="agents-grid">
+        <div class="agent-card">
+          <div class="agent-icon">&#129302;</div>
+          <div>
+            <h3>Ingestion Agent</h3>
+            <p>Recognizes schemas, maps columns, validates structure, and loads data into the canonical model automatically.</p>
+          </div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-icon">&#129302;</div>
+          <div>
+            <h3>Validation Agent</h3>
+            <p>Runs multi-level checks across forms and sources, surfaces findings, and generates site-ready query text.</p>
+          </div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-icon">&#129302;</div>
+          <div>
+            <h3>Coding Agent</h3>
+            <p>Proposes MedDRA/WHO Drug codes with confidence scores. High-confidence matches auto-code; the rest go to reviewers.</p>
+          </div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-icon">&#129302;</div>
+          <div>
+            <h3>Reconciliation Agent</h3>
+            <p>Matches SAE and external vendor records, classifies discrepancies, and routes to appropriate owners.</p>
+          </div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-icon">&#129302;</div>
+          <div>
+            <h3>SDTM Agent</h3>
+            <p>Bootstraps mapping specs from CRFs and protocol, executes transformations, and runs conformance checks.</p>
+          </div>
+        </div>
+        <div class="agent-card">
+          <div class="agent-icon">&#129302;</div>
+          <div>
+            <h3>Study Build Agent</h3>
+            <p>Translates protocol into CDASH-aligned EDC designs with forms, edit checks, and platform-specific outputs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works">
+    <div class="section section-center">
+      <div class="section-label">Workflow</div>
+      <h2 class="section-title">From raw data to submission-ready packages</h2>
+      <p class="section-subtitle">ClinMaker orchestrates the entire clinical data lifecycle through a unified pipeline.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Ingest &amp; Normalize</h3>
+          <p>Connect your data sources. ClinMaker ingests, validates, and maps everything to a canonical clinical data model.</p>
+          <span class="step-arrow">&rarr;</span>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Validate &amp; Reconcile</h3>
+          <p>AI agents run validation rules, reconcile across sources, code medical terms, and generate queries automatically.</p>
+          <span class="step-arrow">&rarr;</span>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Transform &amp; Submit</h3>
+          <p>Generate SDTM datasets, Define.xml, reviewer guides, and submission-ready packages with full traceability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="cta-section">
+    <h2>Ready to modernize your clinical data workflows?</h2>
+    <p>See how ClinMaker can accelerate your trials while maintaining full GxP compliance.</p>
+    <a href="mailto:contact@clinmaker.com" class="btn-white">Get in Touch &rarr;</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Clin<span>Maker</span></div>
+        <p class="footer-text">&copy; 2026 ClinMaker. All rights reserved.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#agents">AI Agents</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="mailto:contact@clinmaker.com">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

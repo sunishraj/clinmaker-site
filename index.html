@@ -27,8 +27,9 @@
     /* ── NAV ── */
     .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--surface-border); }
     .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
-    .logo { font-size: 1.5rem; font-weight: 900; text-decoration: none; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
-    .logo span { color: var(--teal-600); }
+    .logo { font-size: 1.5rem; font-weight: 900; text-decoration: none; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+    .logo-text { letter-spacing: -0.02em; color: var(--text-primary); }
+    .logo-text span { color: var(--teal-600); }
     .logo-icon { width: 32px; height: 32px; flex-shrink: 0; }
     .nav-links { display: flex; gap: 28px; align-items: center; }
     .nav-links a { text-decoration: none; color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
@@ -86,7 +87,8 @@
     .mock-dash { padding: 20px; min-height: 340px; }
     .mock-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--surface-border); }
     .mock-logo { font-weight: 900; font-size: 0.875rem; color: var(--text-primary); display: flex; align-items: center; gap: 6px; }
-    .mock-logo span { color: var(--teal-600); }
+    .mock-logo > span { color: var(--text-primary); }
+    .mock-logo > span span { color: var(--teal-600); }
     .mock-logo svg { width: 18px; height: 18px; flex-shrink: 0; }
     .mock-nav-pills { display: flex; gap: 8px; }
     .mock-pill { padding: 4px 12px; border-radius: 6px; font-size: 0.625rem; font-weight: 600; background: var(--surface-card); color: var(--text-secondary); border: 1px solid var(--surface-border); }
@@ -190,7 +192,7 @@
     .footer { background: var(--text-primary); color: rgba(255,255,255,0.6); padding: 48px 24px; }
     .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
     .footer-logo { font-size: 1.25rem; font-weight: 900; color: var(--white); display: flex; align-items: center; gap: 8px; }
-    .footer-logo span { color: var(--teal-500); }
+    .footer-logo .footer-logo-text span { color: var(--teal-500); }
     .footer-logo .logo-icon-footer { width: 28px; height: 28px; flex-shrink: 0; }
     .footer-text { font-size: 0.8125rem; }
     .footer-links { display: flex; gap: 24px; }
@@ -218,7 +220,7 @@
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-inner">
-    <a href="#" class="logo"><svg class="logo-icon" viewBox="0 0 48 48" fill="none"><path d="M36 10.5a18 18 0 1 0 0 27" stroke="#0d9488" stroke-width="5.5" stroke-linecap="round"/><line x1="18" y1="18" x2="36" y2="18" stroke="#0d9488" stroke-width="1.5"/><circle cx="21" cy="18" r="1.2" fill="#0d9488"/><circle cx="27" cy="18" r="1.2" fill="#0d9488"/><circle cx="33" cy="18" r="1.2" fill="#0d9488"/><polygon points="37,18 34,16 34,20" fill="#0d9488"/><line x1="20" y1="24" x2="38" y2="24" stroke="#7850dc" stroke-width="1.5"/><circle cx="23" cy="24" r="1.2" fill="#7850dc"/><circle cx="29" cy="24" r="1.2" fill="#7850dc"/><circle cx="35" cy="24" r="1.2" fill="#7850dc"/><polygon points="39,24 36,22 36,26" fill="#7850dc"/><line x1="18" y1="30" x2="36" y2="30" stroke="#0d9488" stroke-width="1.5"/><circle cx="21" cy="30" r="1.2" fill="#0d9488"/><circle cx="27" cy="30" r="1.2" fill="#0d9488"/><circle cx="33" cy="30" r="1.2" fill="#0d9488"/><polygon points="37,30 34,28 34,32" fill="#0d9488"/></svg>Clin<span>Maker</span></a>
+    <a href="#" class="logo"><svg class="logo-icon" viewBox="0 0 48 48" fill="none"><path d="M36 10.5a18 18 0 1 0 0 27" stroke="#0d9488" stroke-width="5.5" stroke-linecap="round"/><line x1="18" y1="18" x2="36" y2="18" stroke="#0d9488" stroke-width="1.5"/><circle cx="21" cy="18" r="1.2" fill="#0d9488"/><circle cx="27" cy="18" r="1.2" fill="#0d9488"/><circle cx="33" cy="18" r="1.2" fill="#0d9488"/><polygon points="37,18 34,16 34,20" fill="#0d9488"/><line x1="20" y1="24" x2="38" y2="24" stroke="#7850dc" stroke-width="1.5"/><circle cx="23" cy="24" r="1.2" fill="#7850dc"/><circle cx="29" cy="24" r="1.2" fill="#7850dc"/><circle cx="35" cy="24" r="1.2" fill="#7850dc"/><polygon points="39,24 36,22 36,26" fill="#7850dc"/><line x1="18" y1="30" x2="36" y2="30" stroke="#0d9488" stroke-width="1.5"/><circle cx="21" cy="30" r="1.2" fill="#0d9488"/><circle cx="27" cy="30" r="1.2" fill="#0d9488"/><circle cx="33" cy="30" r="1.2" fill="#0d9488"/><polygon points="37,30 34,28 34,32" fill="#0d9488"/></svg><span class="logo-text">Clin<span>Maker</span></span></a>
     <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button>
@@ -252,7 +254,7 @@
       <div class="mockup-screen">
         <div class="mock-dash">
           <div class="mock-topbar">
-            <div class="mock-logo"><svg viewBox="0 0 48 48" fill="none"><path d="M36 10.5a18 18 0 1 0 0 27" stroke="#0d9488" stroke-width="5.5" stroke-linecap="round"/><line x1="18" y1="18" x2="36" y2="18" stroke="#0d9488" stroke-width="1.5"/><circle cx="21" cy="18" r="1.2" fill="#0d9488"/><circle cx="27" cy="18" r="1.2" fill="#0d9488"/><circle cx="33" cy="18" r="1.2" fill="#0d9488"/><polygon points="37,18 34,16 34,20" fill="#0d9488"/><line x1="20" y1="24" x2="38" y2="24" stroke="#7850dc" stroke-width="1.5"/><circle cx="23" cy="24" r="1.2" fill="#7850dc"/><circle cx="29" cy="24" r="1.2" fill="#7850dc"/><circle cx="35" cy="24" r="1.2" fill="#7850dc"/><polygon points="39,24 36,22 36,26" fill="#7850dc"/><line x1="18" y1="30" x2="36" y2="30" stroke="#0d9488" stroke-width="1.5"/><circle cx="21" cy="30" r="1.2" fill="#0d9488"/><circle cx="27" cy="30" r="1.2" fill="#0d9488"/><circle cx="33" cy="30" r="1.2" fill="#0d9488"/><polygon points="37,30 34,28 34,32" fill="#0d9488"/></svg>Clin<span>Maker</span></div>
+            <div class="mock-logo"><svg viewBox="0 0 48 48" fill="none"><path d="M36 10.5a18 18 0 1 0 0 27" stroke="#0d9488" stroke-width="5.5" stroke-linecap="round"/><line x1="18" y1="18" x2="36" y2="18" stroke="#0d9488" stroke-width="1.5"/><circle cx="21" cy="18" r="1.2" fill="#0d9488"/><circle cx="27" cy="18" r="1.2" fill="#0d9488"/><circle cx="33" cy="18" r="1.2" fill="#0d9488"/><polygon points="37,18 34,16 34,20" fill="#0d9488"/><line x1="20" y1="24" x2="38" y2="24" stroke="#7850dc" stroke-width="1.5"/><circle cx="23" cy="24" r="1.2" fill="#7850dc"/><circle cx="29" cy="24" r="1.2" fill="#7850dc"/><circle cx="35" cy="24" r="1.2" fill="#7850dc"/><polygon points="39,24 36,22 36,26" fill="#7850dc"/><line x1="18" y1="30" x2="36" y2="30" stroke="#0d9488" stroke-width="1.5"/><circle cx="21" cy="30" r="1.2" fill="#0d9488"/><circle cx="27" cy="30" r="1.2" fill="#0d9488"/><circle cx="33" cy="30" r="1.2" fill="#0d9488"/><polygon points="37,30 34,28 34,32" fill="#0d9488"/></svg><span>Clin<span>Maker</span></span></div>
             <div class="mock-nav-pills">
               <div class="mock-pill active">Dashboard</div>
               <div class="mock-pill">Studies</div>
@@ -732,7 +734,7 @@
 <footer class="footer">
   <div class="footer-inner">
     <div>
-      <div class="footer-logo"><svg class="logo-icon-footer" viewBox="0 0 48 48" fill="none"><path d="M36 10.5a18 18 0 1 0 0 27" stroke="#14b8a6" stroke-width="5.5" stroke-linecap="round"/><line x1="18" y1="18" x2="36" y2="18" stroke="#14b8a6" stroke-width="1.5"/><circle cx="21" cy="18" r="1.2" fill="#14b8a6"/><circle cx="27" cy="18" r="1.2" fill="#14b8a6"/><circle cx="33" cy="18" r="1.2" fill="#14b8a6"/><polygon points="37,18 34,16 34,20" fill="#14b8a6"/><line x1="20" y1="24" x2="38" y2="24" stroke="#7850dc" stroke-width="1.5"/><circle cx="23" cy="24" r="1.2" fill="#7850dc"/><circle cx="29" cy="24" r="1.2" fill="#7850dc"/><circle cx="35" cy="24" r="1.2" fill="#7850dc"/><polygon points="39,24 36,22 36,26" fill="#7850dc"/><line x1="18" y1="30" x2="36" y2="30" stroke="#14b8a6" stroke-width="1.5"/><circle cx="21" cy="30" r="1.2" fill="#14b8a6"/><circle cx="27" cy="30" r="1.2" fill="#14b8a6"/><circle cx="33" cy="30" r="1.2" fill="#14b8a6"/><polygon points="37,30 34,28 34,32" fill="#14b8a6"/></svg>Clin<span>Maker</span></div>
+      <div class="footer-logo"><svg class="logo-icon-footer" viewBox="0 0 48 48" fill="none"><path d="M36 10.5a18 18 0 1 0 0 27" stroke="#14b8a6" stroke-width="5.5" stroke-linecap="round"/><line x1="18" y1="18" x2="36" y2="18" stroke="#14b8a6" stroke-width="1.5"/><circle cx="21" cy="18" r="1.2" fill="#14b8a6"/><circle cx="27" cy="18" r="1.2" fill="#14b8a6"/><circle cx="33" cy="18" r="1.2" fill="#14b8a6"/><polygon points="37,18 34,16 34,20" fill="#14b8a6"/><line x1="20" y1="24" x2="38" y2="24" stroke="#7850dc" stroke-width="1.5"/><circle cx="23" cy="24" r="1.2" fill="#7850dc"/><circle cx="29" cy="24" r="1.2" fill="#7850dc"/><circle cx="35" cy="24" r="1.2" fill="#7850dc"/><polygon points="39,24 36,22 36,26" fill="#7850dc"/><line x1="18" y1="30" x2="36" y2="30" stroke="#14b8a6" stroke-width="1.5"/><circle cx="21" cy="30" r="1.2" fill="#14b8a6"/><circle cx="27" cy="30" r="1.2" fill="#14b8a6"/><circle cx="33" cy="30" r="1.2" fill="#14b8a6"/><polygon points="37,30 34,28 34,32" fill="#14b8a6"/></svg><span class="footer-logo-text">Clin<span>Maker</span></span></div>
       <p class="footer-text">&copy; 2026 ClinMaker. All rights reserved.</p>
     </div>
     <div class="footer-links">

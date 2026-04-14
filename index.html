@@ -57,6 +57,29 @@
     .btn-white { display: inline-flex; align-items: center; gap: 8px; background: var(--white); color: var(--teal-800); padding: 14px 32px; border-radius: 10px; font-size: 1rem; font-weight: 700; text-decoration: none; transition: all 0.2s; }
     .btn-white:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
 
+    /* ── Demo Modal ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); border-radius: 16px; width: 90%; max-width: 480px; padding: 36px; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: modalIn 0.25s ease-out; max-height: 90vh; overflow-y: auto; }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.25rem; line-height: 1; padding: 4px; }
+    .modal-close:hover { color: var(--text-primary); }
+    .modal h3 { font-size: 1.375rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; }
+    .modal p.modal-sub { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.8125rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--surface-border); border-radius: 8px; font-size: 0.875rem; font-family: inherit; background: var(--surface-card); color: var(--text-primary); transition: border-color 0.2s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--teal-500); box-shadow: 0 0 0 3px rgba(13,148,136,0.1); }
+    .form-group textarea { resize: vertical; min-height: 70px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .btn-submit { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--teal-600); color: var(--white); padding: 12px 24px; border-radius: 10px; font-size: 0.9375rem; font-weight: 600; border: none; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
+    .btn-submit:hover { background: var(--teal-700); }
+    .modal-success { text-align: center; padding: 20px 0; }
+    .modal-success .check { width: 56px; height: 56px; border-radius: 50%; background: var(--teal-50); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+    .modal-success .check svg { width: 28px; height: 28px; color: var(--teal-600); }
+    .modal-success h3 { margin-bottom: 8px; }
+    .modal-success p { color: var(--text-secondary); font-size: 0.875rem; }
+
     /* ── HERO ── */
     .hero { padding: 140px 24px 60px; background: linear-gradient(160deg, var(--white) 0%, #f0fdf9 40%, var(--surface-bg) 100%); text-align: center; position: relative; overflow: hidden; }
     .hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(20,184,166,0.08) 0%, transparent 70%); }
@@ -227,7 +250,7 @@
       <a href="#pipeline">Platform</a>
       <a href="#standards">Standards</a>
       <a href="#compliance">Compliance</a>
-      <a href="#contact" class="nav-cta">Request a Demo</a>
+      <a href="#" class="nav-cta" onclick="openDemoModal(); return false;">Request a Demo</a>
     </div>
   </div>
 </nav>
@@ -239,7 +262,7 @@
     <h1>End-to-End Clinical Data<br>Automation, <span class="teal">Reimagined.</span></h1>
     <p class="hero-sub">From protocol authoring to regulatory submission &mdash; ClinMaker orchestrates the entire clinical data lifecycle with autonomous AI agents, so your team can focus on science.</p>
     <div class="hero-buttons">
-      <a href="#contact" class="btn-primary">Request a Demo &rarr;</a>
+      <a href="#" class="btn-primary" onclick="openDemoModal(); return false;">Request a Demo &rarr;</a>
       <a href="#pipeline" class="btn-outline">See the Platform</a>
     </div>
   </div>
@@ -725,7 +748,7 @@
 <section id="contact" class="cta-section">
   <h2>Ready to automate your clinical data lifecycle?</h2>
   <p>See how ClinMaker can accelerate your trials from protocol to submission while maintaining full GxP compliance.</p>
-  <a href="mailto:contact@clinmaker.com" class="btn-white">Request a Demo &rarr;</a>
+  <a href="#" class="btn-white" onclick="openDemoModal(); return false;">Request a Demo &rarr;</a>
 </section>
 
 <!-- FOOTER -->
@@ -744,6 +767,62 @@
   </div>
 </footer>
 
+<!-- DEMO REQUEST MODAL -->
+<div class="modal-overlay" id="demoModal" onclick="if(event.target===this)closeDemoModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeDemoModal()" aria-label="Close">&times;</button>
+    <div id="demoForm">
+      <h3>Request a Demo</h3>
+      <p class="modal-sub">Tell us about yourself and we'll set up a personalized walkthrough.</p>
+      <form onsubmit="submitDemoForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="demo-first">First Name *</label>
+            <input type="text" id="demo-first" required placeholder="Jane">
+          </div>
+          <div class="form-group">
+            <label for="demo-last">Last Name *</label>
+            <input type="text" id="demo-last" required placeholder="Smith">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="demo-email">Work Email *</label>
+          <input type="email" id="demo-email" required placeholder="jane@pharma.com">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="demo-company">Company *</label>
+            <input type="text" id="demo-company" required placeholder="Pharma Inc.">
+          </div>
+          <div class="form-group">
+            <label for="demo-role">Role</label>
+            <select id="demo-role">
+              <option value="">Select...</option>
+              <option>Data Manager</option>
+              <option>Clinical Operations</option>
+              <option>Biostatistician</option>
+              <option>Medical Coder</option>
+              <option>IT / Engineering</option>
+              <option>Executive / Leadership</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="demo-interest">What are you most interested in?</label>
+          <textarea id="demo-interest" placeholder="e.g., SDTM automation, medical coding, data ingestion..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Send Request &rarr;</button>
+      </form>
+    </div>
+    <div id="demoSuccess" class="modal-success" style="display:none">
+      <div class="check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+      <h3>Thank you!</h3>
+      <p>We've received your request and will be in touch shortly at the email you provided.</p>
+    </div>
+  </div>
+</div>
+
 <script>
 function showPanel(id) {
   document.querySelectorAll('.fd-panel').forEach(p => p.classList.remove('active'));
@@ -755,6 +834,41 @@ function showPanel(id) {
   const detail = document.querySelector('.feature-detail');
   if (detail) detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+// Demo modal
+function openDemoModal() {
+  document.getElementById('demoModal').classList.add('open');
+  document.getElementById('demoForm').style.display = '';
+  document.getElementById('demoSuccess').style.display = 'none';
+  document.body.style.overflow = 'hidden';
+}
+function closeDemoModal() {
+  document.getElementById('demoModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function submitDemoForm(e) {
+  e.preventDefault();
+  var first = document.getElementById('demo-first').value.trim();
+  var last = document.getElementById('demo-last').value.trim();
+  var email = document.getElementById('demo-email').value.trim();
+  var company = document.getElementById('demo-company').value.trim();
+  var role = document.getElementById('demo-role').value;
+  var interest = document.getElementById('demo-interest').value.trim();
+  var subject = encodeURIComponent('Demo Request from ' + first + ' ' + last + ' (' + company + ')');
+  var body = encodeURIComponent(
+    'Name: ' + first + ' ' + last + '\n' +
+    'Email: ' + email + '\n' +
+    'Company: ' + company + '\n' +
+    'Role: ' + (role || 'Not specified') + '\n' +
+    'Interest: ' + (interest || 'Not specified') + '\n'
+  );
+  // Send via mailto
+  window.location.href = 'mailto:contact@clinmaker.com?subject=' + subject + '&body=' + body;
+  // Show success state
+  document.getElementById('demoForm').style.display = 'none';
+  document.getElementById('demoSuccess').style.display = '';
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeDemoModal(); });
+
 // Animate bars on load
 window.addEventListener('load', function() {
   document.querySelectorAll('.mock-bar').forEach(function(bar, i) {
